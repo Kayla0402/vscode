@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <script src="./vue.js"></script>
+    <style>
+        .message-box {
+            padding: 10px 20px;
+            background: #4fc08d;
+            border: 1px solid#42b983;
+        }
+        
+        .message-box-close {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 宿主文件 -->
+    <div id="app">
+        <!-- <message :show.sync="show" /> -->
+           
+        <!-- <course-add v-model="course" @add-course="addCourse(course)" /> -->
+        <div v-for="（item, index） in courseList" :key="index">
+            {{ item.name }}----${{item.price}}
+        </div>
+        <!-- $event:表示传递过来的值 -->
+        <!-- <message :show="show" /> -->
+        <!-- <h2>{{title}}</h2> -->
+        <!-- 组件一：输入框 -->
+        <!-- <course-add @add-course=' addCourse '></course-add> -->
+        <!-- v-model可拆分为@input和：value数值的绑定 -->
+        <!-- <course-add v-model="course" @add-course="addCourse">
+        </course-add> -->
+        <!-- $event:传递过来的值 -->
+        <!-- <course-add :value=' course ' @input='course=$event ' @add-course='addCourse '></course-add> -->
+        <!-- <input type="text " v-model='course ' @keydown.enter='addCourse ' />
+        <button @click='addCourse '>新增</button> -->
+
+    </div>
+    <script>
+        // 消息弹框组件
+        Vue.component("message", {
+
+                props: ["show"],
+                template: `
+                <div class="message-box" v-if="show">
+                    <strong>添加成功</strong>
+                    <span class="message-box-close" @click="$emit('close ', false)">X</span>
+                </div>
+                `
+
+            })
+            // 输入框组件
+        Vue.component("course-add", {
+            // data() {
+            //     return {
+            //         course: ' '
+            //     }
+            // },
+            props: ["value"],
+            template: `
+            <div>
+                <input type="text" :value="value" 
+                    @input="onInput"
+                    @keydown.enter="addCourse" />
+                <button @click="addCourse">新增</button>
+            </div>
+            `,
+            methods: {
+                addCourse() {
+                    this.$emit('add-course ')
+                        // this.course = ' '
+                },
+                onInput(e) {
+                    this.$emit('input ', e.target.value)
+                }
+            },
+        })
+
+        const app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    title: '购物车',
+                    course: '',
+                    courseList: [{name:'语文',price:200},{name:'数学',price:100},],
+                    show: true,
+                }
+            },
+            methods: {
+                addCourse() {
+                    this.courseList.push(this.course);
+                    this.course = ''
+                    this.show = true
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

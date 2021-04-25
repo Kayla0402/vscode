@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .message-box {
+            padding: 10px 20px;
+            background: #4fc08d;
+            border: 1px solid#42b983;
+        }
+        
+        .message-box-close {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h3>{{title}}</h3>
+        <!-- 添加课程的组件 -->
+    
+        <!-- <input v-model="testData" type="text" /> -->
+        <!-- <input type="text" :value='testData' @input="testData=$event.target.value"> -->
+        <!-- <input type="text" value='testDatatestDatatest'> -->
+        <course-add v-model="course" @add-course="addCourse"/>
+
+        <!-- <course-add @add-course="addCourse"/> -->
+        <!-- <input type="text" v-model='course' @keydown.enter="addCourse" />
+        <button @click='addCourse'>添加</button> -->
+        <!-- 课程列表组件 -->
+        {{courseList}}
+        <div v-for="(item,index) in courseList" :key="index">
+            {{ item }}
+        </div>
+    </div>
+    <script>
+        Vue.component('course-add', {
+            props:['value'],
+            // data() {
+            //     return {
+            //         course: ''
+            //     }
+            // },
+            template:`
+            <div>
+                <input type="text" :value='value' @input="onInput" @keydown.enter="addCourse" />
+                <button @click='addCourse'>添加</button>
+            </div>    
+                `,
+            methods: {
+                addCourse() {
+                    this.$emit('add-course')
+                    // this.course=''
+                },
+                onInput(e) {
+                    this.$emit('input',e.target.value)
+                }
+            },
+        })
+   const app = new Vue({
+       el: '#app',
+       data() {
+           return {
+               title: '购物车',
+               course:'托尔斯泰',
+                courseList:[],
+                testData: ''
+           }
+       },
+       methods: {
+        addCourse() {
+               this.courseList.push(this.course)
+               this.course=''
+           }
+       },
+   })
+    </script>
+</body>
+
+</html>
